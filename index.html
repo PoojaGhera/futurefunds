@@ -1,0 +1,2247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Future Funds 🐷</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --anaya-grad:  linear-gradient(135deg, #7C3AED, #DB2777);
+      --anaya-color: #7C3AED;
+      --anaya-light: #EDE9FE;
+
+      --jia-grad:    linear-gradient(135deg, #2563EB, #0891B2);
+      --jia-color:   #2563EB;
+      --jia-light:   #DBEAFE;
+
+      --parent-bg:   #F8FAFC;
+      --parent-card: #FFFFFF;
+      --parent-dark: #0F172A;
+      --parent-mid:  #475569;
+      --parent-blue: #3B82F6;
+      --parent-border: #E2E8F0;
+
+      --savings-color:  #059669;
+      --spending-color: #D97706;
+      --danger:  #EF4444;
+      --success: #10B981;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #1a1a2e;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ============================================================
+       VIEW SYSTEM
+    ============================================================ */
+    .view { display: none; min-height: 100vh; }
+    .view.active { display: flex; flex-direction: column; }
+
+    /* ============================================================
+       HOME SCREEN
+    ============================================================ */
+    #view-home {
+      background: linear-gradient(160deg, #0A1628 0%, #1B3A5C 50%, #243B55 100%);
+      align-items: center;
+      padding: 40px 20px;
+      gap: 32px;
+    }
+
+    .home-logo-area { text-align: center; }
+    .home-pig { font-size: 72px; animation: pigBounce 2s ease-in-out infinite; }
+
+    @keyframes pigBounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-12px); }
+    }
+
+    .home-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: 36px;
+      font-weight: 900;
+      color: #FFFFFF;
+      letter-spacing: -1px;
+      margin-top: 8px;
+    }
+
+    .home-subtitle {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      margin-top: 6px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .avatar-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .avatar-card {
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 28px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s, border-color 0.2s;
+      backdrop-filter: blur(10px);
+    }
+
+    .avatar-card:hover, .avatar-card:active {
+      transform: scale(1.04);
+      background: rgba(255,255,255,0.16);
+      border-color: rgba(255,255,255,0.3);
+    }
+
+    .avatar-card.kid-anaya { border-color: rgba(255,81,47,0.5); }
+    .avatar-card.kid-anaya:hover { border-color: #FF512F; background: rgba(255,81,47,0.2); }
+    .avatar-card.kid-jia   { border-color: rgba(0,180,216,0.5); }
+    .avatar-card.kid-jia:hover   { border-color: #00B4D8; background: rgba(0,180,216,0.2); }
+
+    .avatar-icon { font-size: 48px; margin-bottom: 10px; }
+    .avatar-name {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      color: #FFFFFF;
+    }
+    .avatar-role {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 3px;
+    }
+
+    /* ============================================================
+       PIN SCREEN
+    ============================================================ */
+    #view-pin {
+      background: linear-gradient(160deg, #0A1628 0%, #1B3A5C 50%, #243B55 100%);
+      align-items: center;
+      justify-content: center;
+      padding: 24px 20px;
+      gap: 0;
+    }
+
+    .pin-header {
+      text-align: center;
+      margin-bottom: 28px;
+      position: relative;
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .back-btn {
+      position: absolute;
+      left: 0;
+      top: 0;
+      background: rgba(255,255,255,0.12);
+      border: none;
+      color: white;
+      font-size: 20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.2); }
+
+    .pin-avatar-icon { font-size: 56px; margin-bottom: 10px; display: block; }
+    .pin-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: white;
+    }
+    .pin-subtitle { font-size: 14px; color: rgba(255,255,255,0.55); margin-top: 4px; }
+
+    .pin-dots {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+    .dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2.5px solid rgba(255,255,255,0.4);
+      background: transparent;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    }
+    .dot.filled {
+      background: white;
+      border-color: white;
+      transform: scale(1.15);
+    }
+
+    .pin-error {
+      font-size: 13px;
+      color: #FCA5A5;
+      min-height: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .numpad {
+      display: grid;
+      grid-template-columns: repeat(3, 72px);
+      gap: 12px;
+    }
+    .num-btn {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .num-btn:hover { background: rgba(255,255,255,0.18); }
+    .num-btn:active { transform: scale(0.92); background: rgba(255,255,255,0.25); }
+    .num-btn.del { font-size: 20px; }
+    .num-btn.empty { visibility: hidden; }
+    .num-btn.loading { opacity: 0.5; pointer-events: none; }
+
+    /* ============================================================
+       SPINNER SCREEN
+    ============================================================ */
+    #view-spinner {
+      background: linear-gradient(160deg, #0A1628 0%, #0E4D6E 50%, #0A1628 100%);
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      padding: 40px 20px;
+    }
+
+    .spinner-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: white;
+      text-align: center;
+    }
+
+    .spinner-container {
+      position: relative;
+      width: 240px;
+      height: 240px;
+    }
+
+    .spinner-wheel {
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: conic-gradient(
+        #FF6B6B   0deg  45deg,
+        #FFE66D  45deg  90deg,
+        #4ECDC4  90deg 135deg,
+        #45B7D1 135deg 180deg,
+        #A55EEA 180deg 225deg,
+        #FD9644 225deg 270deg,
+        #26DE81 270deg 315deg,
+        #FC5C65 315deg 360deg
+      );
+      box-shadow: 0 0 40px rgba(124,58,237,0.5);
+      position: relative;
+    }
+
+    .spinner-wheel::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px; height: 60px;
+      background: #1a1a2e;
+      border-radius: 50%;
+      border: 4px solid rgba(255,255,255,0.2);
+      z-index: 6;
+    }
+
+    .wheel-label {
+      position: absolute;
+      font-family: 'Nunito', sans-serif;
+      font-size: 9px;
+      font-weight: 900;
+      color: rgba(255,255,255,0.95);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+      white-space: nowrap;
+      pointer-events: none;
+      text-align: center;
+      max-width: 56px;
+      line-height: 1.2;
+      z-index: 5;
+    }
+
+    .spinner-stage-label {
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .spinner-result-word {
+      font-family: 'Nunito', sans-serif;
+      font-size: 38px;
+      font-weight: 900;
+      color: white;
+      text-shadow: 0 0 20px rgba(255,255,255,0.3);
+      letter-spacing: 2px;
+      text-align: center;
+      min-height: 56px;
+    }
+
+    .spinner-action-btn {
+      background: linear-gradient(135deg, #FF512F, #FF2D78);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 16px 40px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(255,81,47,0.4);
+      letter-spacing: 1px;
+      animation: fadeInUp 0.4s ease;
+    }
+    .spinner-action-btn:hover  { transform: scale(1.06); box-shadow: 0 6px 28px rgba(124,58,237,0.6); }
+    .spinner-action-btn:active { transform: scale(0.97); }
+    .spinner-action-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .spin-dashboard-btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 18px;
+      border: none;
+      background: linear-gradient(135deg, #F59E0B, #EF4444);
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 14px rgba(239,68,68,0.3);
+    }
+    .spin-dashboard-btn:hover  { opacity: 0.9; transform: scale(1.01); }
+    .spin-dashboard-btn:active { transform: scale(0.98); }
+
+    .spinner-pointer {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 32px;
+      z-index: 10;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+
+    .spinner-word-box {
+      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 20px;
+      padding: 20px 40px;
+      min-width: 260px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #spinner-word-display {
+      font-family: 'Nunito', sans-serif;
+      font-size: 32px;
+      font-weight: 900;
+      color: white;
+      text-shadow: 0 0 20px rgba(255,255,255,0.3);
+      letter-spacing: 1px;
+    }
+
+    #spinner-continue-btn {
+      display: none;
+      background: linear-gradient(135deg, #7C3AED, #DB2777);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 16px 40px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.2s;
+      animation: fadeInUp 0.4s ease;
+    }
+    #spinner-continue-btn:hover { transform: scale(1.04); }
+
+    /* Word animations — all infinite so they keep going */
+    @keyframes wordSpin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    @keyframes wordJump {
+      0%, 100% { transform: translateY(0)    scale(1); }
+      35%      { transform: translateY(-48px) scale(1.18); }
+      65%      { transform: translateY(-20px) scale(1.06); }
+    }
+    @keyframes wordShake {
+      0%, 100% { transform: translateX(0)    rotate(0deg); }
+      20%      { transform: translateX(-24px) rotate(-9deg); }
+      40%      { transform: translateX( 24px) rotate( 9deg); }
+      60%      { transform: translateX(-18px) rotate(-5deg); }
+      80%      { transform: translateX( 18px) rotate( 5deg); }
+    }
+    @keyframes wordRainbow {
+      0%   { color: #FF0000; text-shadow: 0 0 30px #FF0000; }
+      16%  { color: #FF8800; text-shadow: 0 0 30px #FF8800; }
+      33%  { color: #FFE600; text-shadow: 0 0 30px #FFE600; }
+      50%  { color: #00DD00; text-shadow: 0 0 30px #00DD00; }
+      66%  { color: #0088FF; text-shadow: 0 0 30px #0088FF; }
+      83%  { color: #AA00FF; text-shadow: 0 0 30px #AA00FF; }
+      100% { color: #FF0000; text-shadow: 0 0 30px #FF0000; }
+    }
+
+    /* display:inline-block is required for transform to work on text */
+    .word-spin    { display: inline-block; animation: wordSpin    0.45s linear infinite; }
+    .word-jump    { display: inline-block; animation: wordJump    0.55s ease   infinite; }
+    .word-shake   { display: inline-block; animation: wordShake   0.45s ease   infinite; }
+    .word-rainbow {                        animation: wordRainbow 0.65s linear  infinite; }
+
+    /* ============================================================
+       KID DASHBOARD — shared base
+    ============================================================ */
+    #view-kid {
+      min-height: 100vh;
+      padding-bottom: 40px;
+      background: var(--parent-bg);
+    }
+
+    .kid-header {
+      padding: 48px 24px 36px;
+      text-align: center;
+      position: relative;
+      border-radius: 0 0 32px 32px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    }
+
+    .kid-header-logout {
+      position: absolute;
+      top: 20px; right: 20px;
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: white;
+      font-size: 13px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .kid-header-logout:hover { background: rgba(255,255,255,0.25); }
+
+    .kid-welcome {
+      font-family: 'Nunito', sans-serif;
+      font-size: 30px;
+      font-weight: 900;
+      color: white;
+    }
+    .kid-welcome-icon { font-size: 40px; display: block; margin-bottom: 6px; }
+
+    .notification-banner {
+      display: none;
+      margin: 0 20px 16px;
+      background: linear-gradient(135deg, #F59E0B, #EF4444);
+      border-radius: 16px;
+      padding: 14px 18px;
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      text-align: center;
+      animation: fadeInUp 0.5s ease;
+    }
+
+    .kid-body {
+      padding: 20px 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Balance cards */
+    .balance-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .balance-card {
+      border-radius: 20px;
+      padding: 20px 16px;
+      text-align: center;
+      background: white;
+      border: 2px solid #E2E8F0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .balance-card-icon { font-size: 28px; margin-bottom: 6px; }
+    .balance-card-label {
+      font-family: 'Nunito', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: #94A3B8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .balance-card-amount {
+      font-family: 'Nunito', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      margin-top: 4px;
+    }
+    .balance-card-amount.savings-amt  { color: #10B981; }
+    .balance-card-amount.spending-amt { color: #F59E0B; }
+    .balance-card-locked {
+      font-size: 11px;
+      color: #CBD5E1;
+      margin-top: 4px;
+    }
+
+    /* Request button */
+    .request-btn {
+      width: 100%;
+      padding: 18px;
+      border-radius: 18px;
+      border: none;
+      background: linear-gradient(135deg, #6366F1, #8B5CF6);
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+    }
+    .request-btn:hover { opacity: 0.92; transform: scale(1.01); }
+    .request-btn:active { transform: scale(0.98); }
+
+    /* Transactions section */
+    .section-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--parent-dark);
+      margin-bottom: 12px;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .filter-tab {
+      flex: 1;
+      padding: 8px;
+      border-radius: 10px;
+      border: 2px solid #E2E8F0;
+      background: white;
+      color: #94A3B8;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-tab.active {
+      background: #6366F1;
+      border-color: #6366F1;
+      color: white;
+    }
+
+    .tx-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .tx-item {
+      background: white;
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .tx-icon { font-size: 22px; flex-shrink: 0; }
+    .tx-info { flex: 1; }
+    .tx-type {
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--parent-dark);
+    }
+    .tx-date { font-size: 12px; color: #94A3B8; margin-top: 2px; }
+    .tx-amount {
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+    }
+    .tx-amount.positive { color: #10B981; }
+    .tx-amount.negative { color: #EF4444; }
+    .tx-bucket {
+      font-size: 11px;
+      color: #94A3B8;
+      text-align: right;
+      margin-top: 2px;
+    }
+
+    .no-tx {
+      text-align: center;
+      color: #94A3B8;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      padding: 20px;
+    }
+
+    /* Kid theme gradients — applied to header only */
+    .theme-anaya { background: linear-gradient(160deg, #FF512F 0%, #FF2D78 100%); }
+    .theme-jia   { background: linear-gradient(160deg, #0077B6 0%, #00B4D8 100%); }
+
+    /* ============================================================
+       MODAL (Request + Top-Up)
+    ============================================================ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 100;
+      align-items: flex-end;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-sheet {
+      width: 100%;
+      background: #0F2C3D;
+      border-radius: 28px 28px 0 0;
+      padding: 28px 24px 40px;
+      animation: slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to   { transform: translateY(0); }
+    }
+
+    .modal-handle {
+      width: 40px; height: 4px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 2px;
+      margin: 0 auto 20px;
+    }
+
+    .modal-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .modal-input-group { margin-bottom: 16px; }
+    .modal-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .modal-input {
+      width: 100%;
+      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 14px;
+      padding: 14px 16px;
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .modal-input:focus { border-color: rgba(255,255,255,0.5); }
+    .modal-input::placeholder { color: rgba(255,255,255,0.3); }
+
+    .modal-error {
+      font-size: 13px;
+      color: #FCA5A5;
+      font-family: 'Nunito', sans-serif;
+      min-height: 20px;
+      margin-bottom: 8px;
+    }
+
+    .modal-submit {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 16px;
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.2s;
+      margin-top: 8px;
+    }
+    .modal-submit:hover { transform: scale(1.02); }
+    .modal-submit:active { transform: scale(0.97); }
+    .modal-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .modal-cancel {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background: transparent;
+      color: rgba(255,255,255,0.5);
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+
+    /* ============================================================
+       PARENT DASHBOARD
+    ============================================================ */
+    #view-parent {
+      background: var(--parent-bg);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .parent-header {
+      background: var(--parent-dark);
+      padding: 20px 24px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .parent-header-left { display: flex; align-items: center; gap: 12px; }
+    .parent-pig { font-size: 28px; }
+    .parent-app-name {
+      font-family: 'Nunito', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      color: white;
+    }
+    .parent-welcome {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 1px;
+    }
+
+    .parent-logout-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.7);
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      padding: 7px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .parent-logout-btn:hover { background: rgba(255,255,255,0.18); }
+
+    .parent-body { padding: 24px 20px; display: flex; flex-direction: column; gap: 24px; }
+
+    /* Kids overview */
+    .kids-overview {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .kid-overview-card {
+      background: white;
+      border-radius: 18px;
+      padding: 20px 16px;
+      border: 1.5px solid var(--parent-border);
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.15s;
+      position: relative;
+    }
+    .kid-overview-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+
+    .kid-overview-name {
+      font-family: 'Nunito', sans-serif;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--parent-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .kid-badge {
+      position: absolute;
+      top: 14px; right: 14px;
+      background: #EF4444;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'Nunito', sans-serif;
+      padding: 3px 9px;
+      border-radius: 20px;
+      display: none;
+    }
+    .kid-badge.visible { display: block; }
+
+    .kid-overview-bal {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .bal-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .bal-label {
+      font-size: 12px;
+      color: var(--parent-mid);
+      font-weight: 500;
+    }
+    .bal-value {
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+    }
+    .bal-value.savings  { color: var(--savings-color); }
+    .bal-value.spending { color: var(--spending-color); }
+
+    .view-detail-btn {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1.5px solid var(--parent-border);
+      background: var(--parent-bg);
+      color: var(--parent-mid);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .view-detail-btn:hover { background: #EEF2FF; color: var(--parent-blue); border-color: #C7D2FE; }
+
+    /* Pending requests panel */
+    .panel {
+      background: white;
+      border-radius: 18px;
+      border: 1.5px solid var(--parent-border);
+      overflow: hidden;
+    }
+    .panel-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--parent-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .panel-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--parent-dark);
+    }
+    .panel-count {
+      background: #EF4444;
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Nunito', sans-serif;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+
+    .request-item {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--parent-border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .request-item:last-child { border-bottom: none; }
+
+    .req-info { flex: 1; }
+    .req-kid {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 3px;
+    }
+    .req-kid.anaya { color: #7C3AED; }
+    .req-kid.jia   { color: #2563EB; }
+    .req-reason {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--parent-dark);
+    }
+    .req-amount {
+      font-family: 'Nunito', sans-serif;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--parent-dark);
+      margin: 0 12px;
+    }
+    .req-actions { display: flex; gap: 8px; }
+
+    .btn-approve, .btn-deny {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-approve { background: #D1FAE5; }
+    .btn-approve:hover { background: #A7F3D0; transform: scale(1.1); }
+    .btn-deny    { background: #FEE2E2; }
+    .btn-deny:hover    { background: #FECACA; transform: scale(1.1); }
+
+    .no-requests {
+      padding: 28px;
+      text-align: center;
+      color: var(--parent-mid);
+      font-size: 14px;
+    }
+
+    /* ============================================================
+       PARENT — KID DETAIL VIEW
+    ============================================================ */
+    #view-parent-kid {
+      background: var(--parent-bg);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .detail-header {
+      background: var(--parent-dark);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .detail-back {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: white;
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .detail-kid-name {
+      font-family: 'Nunito', sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      color: white;
+    }
+
+    .detail-body { padding: 24px 20px; display: flex; flex-direction: column; gap: 24px; }
+
+    .detail-balances {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .detail-bal-card {
+      background: white;
+      border: 1.5px solid var(--parent-border);
+      border-radius: 16px;
+      padding: 18px 16px;
+      text-align: center;
+    }
+    .detail-bal-label { font-size: 12px; color: var(--parent-mid); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .detail-bal-amount { font-family: 'Nunito', sans-serif; font-size: 26px; font-weight: 900; }
+    .detail-bal-amount.savings  { color: var(--savings-color); }
+    .detail-bal-amount.spending { color: var(--spending-color); }
+    .detail-bal-interest { font-size: 11px; color: var(--parent-mid); margin-top: 4px; }
+
+    .topup-btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 14px;
+      border: none;
+      background: var(--parent-dark);
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .topup-btn:hover { background: #1E3A5F; transform: scale(1.01); }
+
+    /* Parent transaction list (light theme) */
+    .parent-tx-item {
+      background: white;
+      border: 1px solid var(--parent-border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .parent-tx-icon { font-size: 20px; flex-shrink: 0; }
+    .parent-tx-info { flex: 1; }
+    .parent-tx-type { font-size: 14px; font-weight: 600; color: var(--parent-dark); }
+    .parent-tx-date { font-size: 12px; color: var(--parent-mid); margin-top: 2px; }
+    .parent-tx-right { text-align: right; }
+    .parent-tx-amount { font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800; }
+    .parent-tx-amount.positive { color: var(--savings-color); }
+    .parent-tx-amount.negative { color: var(--danger); }
+    .parent-tx-bucket { font-size: 11px; color: var(--parent-mid); margin-top: 2px; }
+
+    .parent-filter-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+    .parent-filter-tab {
+      flex: 1;
+      padding: 8px;
+      border-radius: 10px;
+      border: 1.5px solid var(--parent-border);
+      background: white;
+      color: var(--parent-mid);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .parent-filter-tab.active {
+      background: var(--parent-dark);
+      border-color: var(--parent-dark);
+      color: white;
+    }
+
+    /* Top-up modal (parent theme) */
+    .modal-sheet.parent-modal {
+      background: white;
+    }
+    .modal-sheet.parent-modal .modal-handle { background: rgba(0,0,0,0.15); }
+    .modal-sheet.parent-modal .modal-title  { color: var(--parent-dark); }
+    .modal-sheet.parent-modal .modal-label  { color: var(--parent-mid); }
+    .modal-sheet.parent-modal .modal-input  {
+      background: var(--parent-bg);
+      border-color: var(--parent-border);
+      color: var(--parent-dark);
+    }
+    .modal-sheet.parent-modal .modal-input::placeholder { color: #CBD5E1; }
+    .modal-sheet.parent-modal .modal-input:focus { border-color: var(--parent-blue); }
+    .modal-sheet.parent-modal .modal-cancel { color: var(--parent-mid); }
+    .modal-sheet.parent-modal .modal-error  { color: var(--danger); }
+
+    /* ============================================================
+       TOAST
+    ============================================================ */
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #1E293B;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 9999;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ============================================================
+       LOADING SPINNER
+    ============================================================ */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(3px);
+    }
+    .loading-overlay.show { display: flex; }
+    .spinner-ring {
+      width: 50px; height: 50px;
+      border: 4px solid rgba(255,255,255,0.2);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ============================================================
+       UTILITIES
+    ============================================================ */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-header {
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--parent-dark);
+      margin-bottom: 12px;
+    }
+
+    /* Scrollable content */
+    .scroll-content { overflow-y: auto; max-height: 60vh; }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     HOME SCREEN
+============================================================ -->
+<div id="view-home" class="view active">
+  <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 20px; gap:36px;">
+    <div class="home-logo-area">
+      <div class="home-pig">🐷</div>
+      <h1 class="home-title">Future Funds</h1>
+      <p class="home-subtitle">Your Family Piggy Bank</p>
+    </div>
+    <div class="avatar-grid">
+      <div class="avatar-card kid-anaya" onclick="selectUser('Anaya','kid')">
+        <div class="avatar-icon">🌸</div>
+        <div class="avatar-name">Anaya</div>
+        <div class="avatar-role">Kid</div>
+      </div>
+      <div class="avatar-card kid-jia" onclick="selectUser('Jia','kid')">
+        <div class="avatar-icon">⭐</div>
+        <div class="avatar-name">Jia</div>
+        <div class="avatar-role">Kid</div>
+      </div>
+      <div class="avatar-card" onclick="selectUser('Pooja','parent')">
+        <div class="avatar-icon">🌺</div>
+        <div class="avatar-name">Pooja</div>
+        <div class="avatar-role">Parent</div>
+      </div>
+      <div class="avatar-card" onclick="selectUser('Amit','parent')">
+        <div class="avatar-icon">🦁</div>
+        <div class="avatar-name">Amit</div>
+        <div class="avatar-role">Parent</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PIN SCREEN
+============================================================ -->
+<div id="view-pin" class="view">
+  <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px 20px;">
+    <div class="pin-header" style="max-width:360px; width:100%;">
+      <button class="back-btn" onclick="goHome()">←</button>
+      <div style="padding-top: 10px;">
+        <span id="pin-avatar" class="pin-avatar-icon"></span>
+        <div class="pin-title" id="pin-name"></div>
+        <div class="pin-subtitle">Enter your 4-digit PIN</div>
+      </div>
+    </div>
+
+    <div class="pin-dots" id="pin-dots">
+      <div class="dot" id="dot-0"></div>
+      <div class="dot" id="dot-1"></div>
+      <div class="dot" id="dot-2"></div>
+      <div class="dot" id="dot-3"></div>
+    </div>
+
+    <div class="pin-error" id="pin-error"></div>
+
+    <div class="numpad" id="numpad">
+      <button class="num-btn" onclick="pinDigit('1')">1</button>
+      <button class="num-btn" onclick="pinDigit('2')">2</button>
+      <button class="num-btn" onclick="pinDigit('3')">3</button>
+      <button class="num-btn" onclick="pinDigit('4')">4</button>
+      <button class="num-btn" onclick="pinDigit('5')">5</button>
+      <button class="num-btn" onclick="pinDigit('6')">6</button>
+      <button class="num-btn" onclick="pinDigit('7')">7</button>
+      <button class="num-btn" onclick="pinDigit('8')">8</button>
+      <button class="num-btn" onclick="pinDigit('9')">9</button>
+      <div class="num-btn empty"></div>
+      <button class="num-btn" onclick="pinDigit('0')">0</button>
+      <button class="num-btn del" onclick="pinBackspace()">⌫</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SPINNER SCREEN
+============================================================ -->
+<div id="view-spinner" class="view">
+  <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; padding:32px 20px;">
+
+    <!-- Stage label -->
+    <div id="spinner-stage-label" class="spinner-stage-label">🎡 SPIN FOR YOUR WORD!</div>
+
+    <!-- Wheel -->
+    <div class="spinner-container">
+      <div class="spinner-pointer">▼</div>
+      <div id="spinner-wheel" class="spinner-wheel"></div>
+    </div>
+
+    <!-- Word result display -->
+    <div style="min-height:64px; display:flex; align-items:center; justify-content:center;">
+      <div id="spinner-word-display" class="spinner-result-word"></div>
+    </div>
+
+    <!-- STAGE 0: initial spin button -->
+    <div id="spinner-actions-0" style="display:flex; flex-direction:column; align-items:center; gap:12px; width:100%; max-width:300px;">
+      <button class="spinner-action-btn" style="width:100%;" onclick="spinStage1()">
+        🎡 SPIN!
+      </button>
+    </div>
+
+    <!-- STAGE 1 actions: shown after word lands — always visible from here on -->
+    <div id="spinner-actions-1" style="display:none; flex-direction:column; align-items:center; gap:12px; width:100%; max-width:300px;">
+      <button class="spinner-action-btn" style="width:100%;" onclick="spinStage2()">
+        🌀 Spin for your move!
+      </button>
+      <button class="spinner-action-btn" style="width:100%; background:rgba(255,255,255,0.12); box-shadow:none; font-size:15px; padding:12px 24px;" onclick="spinStage1()">
+        🔄 New word
+      </button>
+    </div>
+
+    <!-- STAGE 2 actions: shown after animation lands — always visible from here on -->
+    <div id="spinner-actions-2" style="display:none; flex-direction:column; align-items:center; gap:12px; width:100%; max-width:300px;">
+      <button class="spinner-action-btn" style="width:100%; background:linear-gradient(135deg,#059669,#0077B6);" onclick="proceedToDashboard()">
+        Let's go! 🚀
+      </button>
+      <button class="spinner-action-btn" style="width:100%; background:linear-gradient(135deg,#F59E0B,#EF4444); font-size:15px; padding:12px 24px;" onclick="spinStage2()">
+        🔄 Try another move
+      </button>
+      <button class="spinner-action-btn" style="width:100%; background:rgba(255,255,255,0.12); box-shadow:none; font-size:15px; padding:12px 24px;" onclick="spinStage1()">
+        🔄 New word
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================
+     KID DASHBOARD
+============================================================ -->
+<div id="view-kid" class="view">
+  <div class="kid-header" id="kid-header">
+    <button class="kid-header-logout" onclick="logout()">Logout</button>
+    <span class="kid-welcome-icon" id="kid-welcome-icon"></span>
+    <div class="kid-welcome" id="kid-welcome"></div>
+  </div>
+
+  <div id="kid-allowance-notif" class="notification-banner">
+    🎉 Your weekly allowance just dropped! Check your balance!
+  </div>
+
+  <div class="kid-body">
+    <!-- Balances -->
+    <div class="balance-cards">
+      <div class="balance-card">
+        <div class="balance-card-icon">🏦</div>
+        <div class="balance-card-label">Savings</div>
+        <div class="balance-card-amount savings-amt" id="kid-savings">$0.00</div>
+        <div class="balance-card-locked">🔒 Growing at 10% p.a.</div>
+      </div>
+      <div class="balance-card">
+        <div class="balance-card-icon">🛍️</div>
+        <div class="balance-card-label">Spending</div>
+        <div class="balance-card-amount spending-amt" id="kid-spending">$0.00</div>
+      </div>
+    </div>
+
+    <!-- Spin button -->
+    <button class="spin-dashboard-btn" onclick="openSpinnerFromDashboard()">
+      🎡 Spin the Word Wheel!
+    </button>
+
+    <!-- Request button -->
+    <button class="request-btn" onclick="openRequestModal()">
+      💸 Make a Spending Request
+    </button>
+
+    <!-- My Requests -->
+    <div id="kid-requests-section">
+      <div class="section-title">My Requests</div>
+      <div id="kid-requests-list" class="tx-list"></div>
+    </div>
+
+    <!-- Transaction History -->
+    <div>
+      <div class="section-title">Transaction History</div>
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="filterKidTx('week',this)">Weekly</button>
+        <button class="filter-tab" onclick="filterKidTx('month',this)">Monthly</button>
+        <button class="filter-tab" onclick="filterKidTx('year',this)">Yearly</button>
+      </div>
+      <div id="kid-tx-list" class="tx-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PARENT DASHBOARD
+============================================================ -->
+<div id="view-parent" class="view">
+  <div class="parent-header">
+    <div class="parent-header-left">
+      <span class="parent-pig">🐷</span>
+      <div>
+        <div class="parent-app-name">Future Funds</div>
+        <div class="parent-welcome" id="parent-welcome">Welcome back!</div>
+      </div>
+    </div>
+    <button class="parent-logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <div class="parent-body">
+    <!-- Kids overview -->
+    <div>
+      <div class="section-header">Overview</div>
+      <div class="kids-overview">
+        <!-- Anaya card -->
+        <div class="kid-overview-card" onclick="openKidDetail('Anaya')">
+          <span class="kid-badge" id="badge-anaya"></span>
+          <div class="kid-overview-name">🌸 Anaya</div>
+          <div class="kid-overview-bal">
+            <div class="bal-row">
+              <span class="bal-label">💰 Savings</span>
+              <span class="bal-value savings" id="p-anaya-sav">—</span>
+            </div>
+            <div class="bal-row">
+              <span class="bal-label">🛍️ Spending</span>
+              <span class="bal-value spending" id="p-anaya-spe">—</span>
+            </div>
+          </div>
+          <button class="view-detail-btn">View Details →</button>
+        </div>
+        <!-- Jia card -->
+        <div class="kid-overview-card" onclick="openKidDetail('Jia')">
+          <span class="kid-badge" id="badge-jia"></span>
+          <div class="kid-overview-name">⭐ Jia</div>
+          <div class="kid-overview-bal">
+            <div class="bal-row">
+              <span class="bal-label">💰 Savings</span>
+              <span class="bal-value savings" id="p-jia-sav">—</span>
+            </div>
+            <div class="bal-row">
+              <span class="bal-label">🛍️ Spending</span>
+              <span class="bal-value spending" id="p-jia-spe">—</span>
+            </div>
+          </div>
+          <button class="view-detail-btn">View Details →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Requests -->
+    <div>
+      <div class="section-header">Pending Requests</div>
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Awaiting Approval</span>
+          <span class="panel-count" id="pending-count" style="display:none"></span>
+        </div>
+        <div id="parent-requests-list">
+          <div class="no-requests">No pending requests 🎉</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PARENT — KID DETAIL VIEW
+============================================================ -->
+<div id="view-parent-kid" class="view">
+  <div class="detail-header">
+    <button class="detail-back" onclick="backToParent()">←</button>
+    <div>
+      <div class="detail-kid-name" id="detail-kid-name"></div>
+      <div style="font-size:12px; color:rgba(255,255,255,0.5); margin-top:2px;">Detailed View</div>
+    </div>
+  </div>
+
+  <div class="detail-body">
+    <!-- Balances -->
+    <div class="detail-balances">
+      <div class="detail-bal-card">
+        <div class="detail-bal-label">💰 Savings</div>
+        <div class="detail-bal-amount savings" id="detail-savings">—</div>
+        <div class="detail-bal-interest" id="detail-interest"></div>
+      </div>
+      <div class="detail-bal-card">
+        <div class="detail-bal-label">🛍️ Spending</div>
+        <div class="detail-bal-amount spending" id="detail-spending">—</div>
+      </div>
+    </div>
+
+    <!-- Top-up button -->
+    <button class="topup-btn" onclick="openTopUpModal()">
+      ➕ Top Up <span id="topup-kid-name-btn"></span>'s Account
+    </button>
+
+    <!-- Transaction history -->
+    <div>
+      <div class="section-header">Transaction History</div>
+      <div class="parent-filter-tabs">
+        <button class="parent-filter-tab active" onclick="filterParentTx('week',this)">Weekly</button>
+        <button class="parent-filter-tab" onclick="filterParentTx('month',this)">Monthly</button>
+        <button class="parent-filter-tab" onclick="filterParentTx('year',this)">Yearly</button>
+      </div>
+      <div id="parent-kid-tx-list" class="tx-list" style="gap:8px; max-height:50vh; overflow-y:auto;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODALS
+============================================================ -->
+
+<!-- Kid Request Modal -->
+<div id="modal-request" class="modal-overlay" onclick="closeRequestModal(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">💸 Spending Request</div>
+    <div class="modal-input-group">
+      <label class="modal-label">Amount ($)</label>
+      <input id="req-amount" class="modal-input" type="number" inputmode="decimal" placeholder="0.00" min="0.01" step="0.01" />
+    </div>
+    <div class="modal-input-group">
+      <label class="modal-label">What's it for?</label>
+      <input id="req-reason" class="modal-input" type="text" placeholder="Tell me what you want to buy..." maxlength="100" />
+    </div>
+    <div class="modal-error" id="req-error"></div>
+    <button class="modal-submit" id="req-submit-btn"
+      style="background: linear-gradient(135deg, #7C3AED, #DB2777);"
+      onclick="submitRequest()">Send Request 🙏</button>
+    <button class="modal-cancel" onclick="closeRequestModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- Parent Top-Up Modal -->
+<div id="modal-topup" class="modal-overlay" onclick="closeTopUpModal(event)">
+  <div class="modal-sheet parent-modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="topup-modal-title">Top Up Account</div>
+    <div style="background:#F0FDF4; border-radius:12px; padding:12px 16px; margin-bottom:16px;">
+      <div style="font-size:13px; color:#059669; font-weight:600;">
+        💡 Amount will be split 50% savings / 50% spending
+      </div>
+    </div>
+    <div class="modal-input-group">
+      <label class="modal-label" style="color:#475569;">Total Amount ($)</label>
+      <input id="topup-amount" class="modal-input" type="number" inputmode="decimal" placeholder="0.00" min="0.01" step="0.01" />
+    </div>
+    <div class="modal-error" id="topup-error" style="color:#EF4444;"></div>
+    <button class="modal-submit" id="topup-submit-btn"
+      style="background: #0F172A;"
+      onclick="submitTopUp()">Add Money ✅</button>
+    <button class="modal-cancel" onclick="closeTopUpModal()" style="color:#475569;">Cancel</button>
+  </div>
+</div>
+
+<!-- Loading overlay -->
+<div id="loading-overlay" class="loading-overlay">
+  <div class="spinner-ring"></div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+// ============================================================
+// CONFIGURATION — REPLACE WITH YOUR APPS SCRIPT URL
+// ============================================================
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaQI7okrQIka0rgnpVuM-TGkPJpA50H2Zp-9fgaSkaSk0g6aAgjzsnnq9M9RD_ks4F/exec';
+
+// ============================================================
+// APP STATE
+// ============================================================
+const state = {
+  user:           null,   // { name, role }
+  pin:            '',
+  selectedRole:   '',
+  kidData:        null,
+  parentData:     null,
+  selectedKid:    null,
+  parentTxFilter: 'week',
+  kidTxFilter:    'week'
+};
+
+const USER_ICONS = { Anaya:'🌸', Jia:'⭐', Pooja:'🌺', Amit:'🦁' };
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function goHome() {
+  state.pin = '';
+  updatePinDots();
+  document.getElementById('pin-error').textContent = '';
+  showView('view-home');
+}
+
+function logout() {
+  state.user = null;
+  state.pin  = '';
+  state.kidData    = null;
+  state.parentData = null;
+  goHome();
+}
+
+// ============================================================
+// AVATAR SELECTION → PIN SCREEN
+// ============================================================
+function selectUser(name, role) {
+  state.selectedName = name;
+  state.selectedRole = role;
+  state.pin = '';
+
+  document.getElementById('pin-avatar').textContent = USER_ICONS[name] || '👤';
+  document.getElementById('pin-name').textContent   = name;
+  document.getElementById('pin-error').textContent  = '';
+  updatePinDots();
+  showView('view-pin');
+}
+
+// ============================================================
+// PIN ENTRY
+// ============================================================
+function updatePinDots() {
+  for (let i = 0; i < 4; i++) {
+    const dot = document.getElementById('dot-' + i);
+    if (dot) dot.classList.toggle('filled', i < state.pin.length);
+  }
+}
+
+function pinDigit(d) {
+  if (state.pin.length >= 4) return;
+  state.pin += d;
+  updatePinDots();
+  document.getElementById('pin-error').textContent = '';
+  if (state.pin.length === 4) setTimeout(attemptLogin, 120);
+}
+
+function pinBackspace() {
+  if (state.pin.length > 0) {
+    state.pin = state.pin.slice(0, -1);
+    updatePinDots();
+  }
+}
+
+async function attemptLogin() {
+  showLoading(true);
+  try {
+    const res = await apiCall({ action: 'login', name: state.selectedName, pin: state.pin });
+    if (res.success) {
+      state.user = { name: res.name, role: res.role };
+      if (res.role === 'kid') {
+        await loadKidDashboard();
+        showSpinner();
+      } else {
+        await loadParentDashboard();
+        showView('view-parent');
+      }
+    } else {
+      state.pin = '';
+      updatePinDots();
+      document.getElementById('pin-error').textContent = res.error || 'Incorrect PIN. Try again.';
+    }
+  } catch (e) {
+    state.pin = '';
+    updatePinDots();
+    document.getElementById('pin-error').textContent = 'Connection error. Check your internet.';
+  } finally {
+    showLoading(false);
+  }
+}
+
+// ============================================================
+// KID DASHBOARD LOADING
+// ============================================================
+async function loadKidDashboard() {
+  const res = await apiCall({
+    action: 'getKidData',
+    name:   state.user.name,
+    pin:    state.pin
+  });
+  if (!res.success) throw new Error(res.error);
+  state.kidData = res;
+  renderKidDashboard(res);
+}
+
+function renderKidDashboard(data) {
+  const name    = state.user.name;
+  const theme   = name === 'Anaya' ? 'theme-anaya' : 'theme-jia';
+  const header  = document.getElementById('kid-header');
+  const kidView = document.getElementById('view-kid');
+
+  // Apply theme to header only; view stays clean/light
+  kidView.className = 'view active';
+  header.className  = 'kid-header ' + theme;
+
+  document.getElementById('kid-welcome-icon').textContent = USER_ICONS[name] || '⭐';
+  document.getElementById('kid-welcome').textContent      = `Hi ${name}! 👋`;
+
+  // Balances
+  document.getElementById('kid-savings').textContent  = fmt(data.summary.savingsBalance);
+  document.getElementById('kid-spending').textContent = fmt(data.summary.spendingBalance);
+
+  // Allowance notification
+  const notif = document.getElementById('kid-allowance-notif');
+  notif.style.display = data.showAllowanceNotification ? 'block' : 'none';
+
+  // Requests
+  renderKidRequests(data.requests);
+
+  // Transactions (default: weekly)
+  state.kidTxFilter = 'week';
+  renderKidTransactions(data.transactions, 'week');
+}
+
+function renderKidRequests(requests) {
+  const list = document.getElementById('kid-requests-list');
+  const recent = requests.slice(0, 5);
+  if (!recent.length) {
+    list.innerHTML = '<div class="no-tx">No requests yet</div>';
+    return;
+  }
+  list.innerHTML = recent.map(r => {
+    const statusColor = r.status === 'Approved' ? '#34D399' :
+                        r.status === 'Denied'   ? '#FCA5A5' : '#FCD34D';
+    const statusIcon  = r.status === 'Approved' ? '✅' :
+                        r.status === 'Denied'   ? '❌' : '⏳';
+    return `
+      <div class="tx-item">
+        <div class="tx-icon">${statusIcon}</div>
+        <div class="tx-info">
+          <div class="tx-type">${escHtml(r.reason)}</div>
+          <div class="tx-date">${fmtDate(r.date)}</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="tx-amount" style="color:${statusColor}">${fmt(r.amount)}</div>
+          <div class="tx-bucket" style="color:${statusColor}">${r.status}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderKidTransactions(transactions, period) {
+  const list     = document.getElementById('kid-tx-list');
+  const filtered = filterByPeriod(transactions, period);
+
+  if (!filtered.length) {
+    list.innerHTML = '<div class="no-tx">No transactions in this period</div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(tx => {
+    const isPos = tx.amount >= 0;
+    return `
+      <div class="tx-item">
+        <div class="tx-icon">${txIcon(tx.type)}</div>
+        <div class="tx-info">
+          <div class="tx-type">${escHtml(tx.type)}</div>
+          <div class="tx-date">${fmtDate(tx.date)}</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="tx-amount ${isPos ? 'positive' : 'negative'}">
+            ${isPos ? '+' : ''}${fmt(tx.amount)}
+          </div>
+          <div class="tx-bucket">${tx.bucket}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function filterKidTx(period, btn) {
+  state.kidTxFilter = period;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  if (state.kidData) renderKidTransactions(state.kidData.transactions, period);
+}
+
+// ============================================================
+// KID REQUEST MODAL
+// ============================================================
+function openRequestModal() {
+  document.getElementById('req-amount').value  = '';
+  document.getElementById('req-reason').value  = '';
+  document.getElementById('req-error').textContent = '';
+  document.getElementById('modal-request').classList.add('open');
+  setTimeout(() => document.getElementById('req-amount').focus(), 350);
+}
+
+function closeRequestModal(e) {
+  if (!e || e.target === document.getElementById('modal-request'))
+    document.getElementById('modal-request').classList.remove('open');
+}
+
+async function submitRequest() {
+  const amount = parseFloat(document.getElementById('req-amount').value);
+  const reason = document.getElementById('req-reason').value.trim();
+  const errEl  = document.getElementById('req-error');
+
+  if (!amount || amount <= 0) { errEl.textContent = 'Please enter a valid amount'; return; }
+  if (!reason)                { errEl.textContent = 'Please tell us what it\'s for'; return; }
+
+  const btn = document.getElementById('req-submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  try {
+    const res = await apiCall({
+      action:   'submitRequest',
+      kidName:  state.user.name,
+      pin:      state.pin,
+      amount,
+      reason
+    });
+    if (res.success) {
+      document.getElementById('modal-request').classList.remove('open');
+      showToast('✅ Request sent! Waiting for approval.');
+      await loadKidDashboard();
+    } else {
+      errEl.textContent = res.error || 'Something went wrong';
+    }
+  } catch (e) {
+    errEl.textContent = 'Connection error. Please try again.';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Send Request 🙏';
+  }
+}
+
+// ============================================================
+// WORD SPINNER — Two-stage: first spin = word, second spin = animation
+// ============================================================
+
+// Anaya (age 7) — Grade 2 spelling bee style words: short, bright, fun
+const WORDS_ANAYA = [
+  'SUNNY','BRAVE','SWIFT','BLOOM','JOLLY','ZIPPY','GLEAM','CRISP'
+];
+// Jia (age 9) — Grade 4/5 spelling bee style words: more advanced, still positive
+const WORDS_JIA = [
+  'VIBRANT','GALLANT','RADIANT','TRIUMPH','STELLAR','VALIANT','DAZZLE','SPIRITED'
+];
+
+const ANIMS_4   = ['RAINBOW 🌈','SHAKE 🕺','JUMP 🦘','SPIN 🌀'];
+const ANIM_KEYS = ['rainbow','shake','jump','spin'];
+
+let spinSt = { word:'', anim:'', busy:false };
+
+function getKidWords() {
+  return (state.user && state.user.name === 'Jia') ? WORDS_JIA : WORDS_ANAYA;
+}
+
+function showSpinner() {
+  showView('view-spinner');
+  spinSt = { word:'', anim:'', busy:false };
+  document.getElementById('spinner-stage-label').textContent = '🎡 SPIN FOR YOUR WORD!';
+  document.getElementById('spinner-word-display').textContent = '';
+  document.getElementById('spinner-word-display').className   = 'spinner-result-word';
+  showSpinnerActions(0);
+  buildWheel8();
+}
+
+function openSpinnerFromDashboard() { showSpinner(); }
+
+function showSpinnerActions(stage) {
+  document.getElementById('spinner-actions-0').style.display = stage === 0 ? 'flex' : 'none';
+  document.getElementById('spinner-actions-1').style.display = stage === 1 ? 'flex' : 'none';
+  document.getElementById('spinner-actions-2').style.display = stage === 2 ? 'flex' : 'none';
+}
+
+/* Build the 8-word wheel using this kid's word list */
+function buildWheel8() {
+  const words = getKidWords();
+  const w = document.getElementById('spinner-wheel');
+  w.style.transition = 'none';
+  w.style.transform  = 'rotate(0deg)';
+  w.style.background = `conic-gradient(
+    #FF6B6B   0deg  45deg, #FFE66D  45deg  90deg,
+    #4ECDC4  90deg 135deg, #45B7D1 135deg 180deg,
+    #FD9644 180deg 225deg, #26DE81 225deg 270deg,
+    #FC5C65 270deg 315deg, #A55EEA 315deg 360deg)`;
+  w.querySelectorAll('.wheel-label').forEach(l => l.remove());
+  words.forEach((word, i) => {
+    w.appendChild(makeLabel(word, i * 45 + 22.5, '9px'));
+  });
+}
+
+/* Build the 4-animation wheel */
+function buildWheel4() {
+  const w = document.getElementById('spinner-wheel');
+  w.style.transition = 'none';
+  w.style.transform  = 'rotate(0deg)';
+  w.style.background = `conic-gradient(
+    #FF6B6B   0deg  90deg, #FFE66D  90deg 180deg,
+    #4ECDC4 180deg 270deg, #A55EEA 270deg 360deg)`;
+  w.querySelectorAll('.wheel-label').forEach(l => l.remove());
+  ANIMS_4.forEach((anim, i) => {
+    w.appendChild(makeLabel(anim, i * 90 + 45, '11px'));
+  });
+}
+
+function makeLabel(text, angleDeg, fontSize) {
+  const lbl = document.createElement('div');
+  lbl.className = 'wheel-label';
+  lbl.textContent = text;
+  lbl.style.fontSize = fontSize;
+  const rad = (angleDeg - 90) * Math.PI / 180;
+  lbl.style.left      = (120 + 80 * Math.cos(rad)) + 'px';
+  lbl.style.top       = (120 + 80 * Math.sin(rad)) + 'px';
+  lbl.style.transform = `translate(-50%,-50%) rotate(${angleDeg}deg)`;
+  return lbl;
+}
+
+function spinWheel(segments, onDone) {
+  if (spinSt.busy) return;
+  spinSt.busy = true;
+  showSpinnerActions(-1); // hide all buttons while spinning
+  const idx  = Math.floor(Math.random() * segments);
+  const seg  = 360 / segments;
+  const land = 360 - (idx * seg + seg / 2);
+  const tot  = 5 * 360 + land;
+  const w    = document.getElementById('spinner-wheel');
+  setTimeout(() => {
+    w.style.transition = 'transform 3.5s cubic-bezier(0.17,0.67,0.12,0.99)';
+    w.style.transform  = `rotate(${tot}deg)`;
+  }, 60);
+  setTimeout(() => { spinSt.busy = false; onDone(idx); }, 3700);
+}
+
+/* Stage 1: spin for word */
+function spinStage1() {
+  if (spinSt.busy) return;
+  const d = document.getElementById('spinner-word-display');
+  d.textContent = '';
+  d.className   = 'spinner-result-word';
+  document.getElementById('spinner-stage-label').textContent = '🎡 SPINNING…';
+  buildWheel8();
+  spinWheel(8, idx => {
+    spinSt.word   = getKidWords()[idx];
+    d.textContent = spinSt.word + '! ✨';
+    document.getElementById('spinner-stage-label').textContent = '🌀 NOW SPIN FOR YOUR MOVE!';
+    showSpinnerActions(1);
+  });
+}
+
+/* Stage 2: spin for animation */
+function spinStage2() {
+  if (spinSt.busy) return;
+  const d = document.getElementById('spinner-word-display');
+  d.textContent = spinSt.word + '!';
+  d.className   = 'spinner-result-word'; // clear anim while spinning
+  document.getElementById('spinner-stage-label').textContent = '🌀 SPINNING…';
+  buildWheel4();
+  spinWheel(4, idx => {
+    spinSt.anim   = ANIM_KEYS[idx];
+    d.textContent = spinSt.word + '!';
+    d.className   = 'spinner-result-word';
+    void d.offsetWidth;                               // force reflow → animation restarts
+    d.className   = 'spinner-result-word word-' + spinSt.anim;
+    document.getElementById('spinner-stage-label').textContent = '✨ YOUR WORD IS…';
+    showSpinnerActions(2);
+  });
+}
+
+function proceedToDashboard() {
+  renderKidDashboard(state.kidData);
+  showView('view-kid');
+}
+
+// ============================================================
+// PARENT DASHBOARD LOADING
+// ============================================================
+async function loadParentDashboard() {
+  const res = await apiCall({
+    action: 'getParentDashboard',
+    pin:    state.pin
+  });
+  if (!res.success) throw new Error(res.error);
+  state.parentData = res;
+  renderParentDashboard(res);
+}
+
+function renderParentDashboard(data) {
+  document.getElementById('parent-welcome').textContent = `Welcome back, ${data.parentName}!`;
+
+  // Kids balances
+  ['Anaya','Jia'].forEach(kid => {
+    const d    = data.dashboard[kid];
+    const key  = kid.toLowerCase();
+    document.getElementById(`p-${key}-sav`).textContent = fmt(d.summary.savingsBalance);
+    document.getElementById(`p-${key}-spe`).textContent = fmt(d.summary.spendingBalance);
+
+    const badge = document.getElementById(`badge-${key}`);
+    const count = d.pendingRequests.length;
+    badge.textContent = count + (count === 1 ? ' req' : ' reqs');
+    badge.classList.toggle('visible', count > 0);
+  });
+
+  // Pending requests
+  renderParentRequests(data);
+}
+
+function renderParentRequests(data) {
+  const list    = document.getElementById('parent-requests-list');
+  const countEl = document.getElementById('pending-count');
+
+  const allPending = [];
+  ['Anaya','Jia'].forEach(kid => {
+    data.dashboard[kid].pendingRequests.forEach(r => allPending.push({ ...r, kidName: kid }));
+  });
+
+  countEl.style.display = allPending.length ? 'inline-block' : 'none';
+  countEl.textContent   = allPending.length;
+
+  if (!allPending.length) {
+    list.innerHTML = '<div class="no-requests">No pending requests 🎉</div>';
+    return;
+  }
+
+  list.innerHTML = allPending.map(r => `
+    <div class="request-item">
+      <div class="req-info">
+        <div class="req-kid ${r.kidName.toLowerCase()}">${USER_ICONS[r.kidName]} ${r.kidName}</div>
+        <div class="req-reason">${escHtml(r.reason)}</div>
+      </div>
+      <div class="req-amount">${fmt(r.amount)}</div>
+      <div class="req-actions">
+        <button class="btn-approve" title="Approve" onclick="approveRequest('${r.id}','${r.kidName}')">✅</button>
+        <button class="btn-deny"    title="Deny"    onclick="denyRequest('${r.id}','${r.kidName}')">❌</button>
+      </div>
+    </div>`).join('');
+}
+
+async function approveRequest(id, kidName) {
+  showLoading(true);
+  try {
+    const res = await apiCall({ action: 'approveRequest', requestId: id, kidName, pin: state.pin });
+    if (res.success) {
+      showToast(`✅ Approved ${kidName}'s request!`);
+      await loadParentDashboard();
+    } else {
+      showToast('❌ ' + (res.error || 'Failed to approve'));
+    }
+  } finally { showLoading(false); }
+}
+
+async function denyRequest(id, kidName) {
+  showLoading(true);
+  try {
+    const res = await apiCall({ action: 'denyRequest', requestId: id, kidName, pin: state.pin });
+    if (res.success) {
+      showToast(`Request denied.`);
+      await loadParentDashboard();
+    } else {
+      showToast('❌ ' + (res.error || 'Failed to deny'));
+    }
+  } finally { showLoading(false); }
+}
+
+// ============================================================
+// PARENT → KID DETAIL
+// ============================================================
+function openKidDetail(kidName) {
+  state.selectedKid     = kidName;
+  state.parentTxFilter  = 'week';
+
+  const d = state.parentData.dashboard[kidName];
+  document.getElementById('detail-kid-name').textContent    = USER_ICONS[kidName] + ' ' + kidName;
+  document.getElementById('topup-kid-name-btn').textContent = kidName;
+  document.getElementById('detail-savings').textContent     = fmt(d.summary.savingsBalance);
+  document.getElementById('detail-spending').textContent    = fmt(d.summary.spendingBalance);
+  document.getElementById('detail-interest').textContent    =
+    `Total interest earned: ${fmt(d.summary.totalInterestEarned)}`;
+
+  // Reset filter tabs
+  document.querySelectorAll('.parent-filter-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.parent-filter-tab')[0].classList.add('active');
+
+  renderParentTx(d.transactions, 'week');
+  showView('view-parent-kid');
+}
+
+function backToParent() {
+  showView('view-parent');
+}
+
+function renderParentTx(transactions, period) {
+  const list     = document.getElementById('parent-kid-tx-list');
+  const filtered = filterByPeriod(transactions, period);
+
+  if (!filtered.length) {
+    list.innerHTML = '<div style="text-align:center; color:#94A3B8; padding:20px; font-size:14px;">No transactions in this period</div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(tx => {
+    const isPos = tx.amount >= 0;
+    return `
+      <div class="parent-tx-item">
+        <div class="parent-tx-icon">${txIcon(tx.type)}</div>
+        <div class="parent-tx-info">
+          <div class="parent-tx-type">${escHtml(tx.type)}</div>
+          <div class="parent-tx-date">${fmtDate(tx.date)}</div>
+        </div>
+        <div class="parent-tx-right">
+          <div class="parent-tx-amount ${isPos ? 'positive' : 'negative'}">
+            ${isPos ? '+' : ''}${fmt(tx.amount)}
+          </div>
+          <div class="parent-tx-bucket">${tx.bucket}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function filterParentTx(period, btn) {
+  state.parentTxFilter = period;
+  document.querySelectorAll('.parent-filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  if (state.selectedKid && state.parentData) {
+    renderParentTx(state.parentData.dashboard[state.selectedKid].transactions, period);
+  }
+}
+
+// ============================================================
+// TOP-UP MODAL
+// ============================================================
+function openTopUpModal() {
+  document.getElementById('topup-amount').value  = '';
+  document.getElementById('topup-error').textContent = '';
+  document.getElementById('topup-modal-title').textContent = `Top Up ${state.selectedKid}'s Account`;
+  document.getElementById('modal-topup').classList.add('open');
+  setTimeout(() => document.getElementById('topup-amount').focus(), 350);
+}
+
+function closeTopUpModal(e) {
+  if (!e || e.target === document.getElementById('modal-topup'))
+    document.getElementById('modal-topup').classList.remove('open');
+}
+
+async function submitTopUp() {
+  const amount = parseFloat(document.getElementById('topup-amount').value);
+  const errEl  = document.getElementById('topup-error');
+
+  if (!amount || amount <= 0) { errEl.textContent = 'Please enter a valid amount'; return; }
+
+  const btn = document.getElementById('topup-submit-btn');
+  btn.disabled    = true;
+  btn.textContent = 'Adding...';
+
+  try {
+    const res = await apiCall({
+      action:  'topUp',
+      kidName: state.selectedKid,
+      amount,
+      pin:     state.pin
+    });
+    if (res.success) {
+      document.getElementById('modal-topup').classList.remove('open');
+      showToast(`✅ $${amount.toFixed(2)} added to ${state.selectedKid}'s account!`);
+      await loadParentDashboard();
+      openKidDetail(state.selectedKid); // refresh detail view
+    } else {
+      errEl.textContent = res.error || 'Something went wrong';
+    }
+  } catch (e) {
+    errEl.textContent = 'Connection error. Please try again.';
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = 'Add Money ✅';
+  }
+}
+
+// ============================================================
+// API CALL
+// ============================================================
+async function apiCall(data) {
+  if (SCRIPT_URL === 'PASTE_YOUR_APPS_SCRIPT_URL_HERE') {
+    // Demo mode — return mock data so the UI can be previewed
+    return mockApiCall(data);
+  }
+  const resp = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(data) });
+  return await resp.json();
+}
+
+// ============================================================
+// MOCK DATA (demo mode — remove when deploying for real)
+// ============================================================
+function mockApiCall(data) {
+  if (data.action === 'login') {
+    const validUsers = {
+      'anaya': { role:'kid',    name:'Anaya', pin:'1111' },
+      'jia':   { role:'kid',    name:'Jia',   pin:'2222' },
+      'pooja': { role:'parent', name:'Pooja', pin:'1234' },
+      'amit':  { role:'parent', name:'Amit',  pin:'5678' }
+    };
+    const u = validUsers[data.name.toLowerCase()];
+    if (u && u.pin === String(data.pin)) return { success:true, role:u.role, name:u.name };
+    return { success:false, error:'Incorrect PIN. (Demo PINs: Anaya=1111, Jia=2222, Pooja=1234, Amit=5678)' };
+  }
+
+  const now = new Date();
+  const mockTx = [
+    { date: new Date(now - 2*86400000).toISOString(), type:'Weekly Allowance', amount:1.75, bucket:'Savings', note:'', savingsAfter:101.75, spendingAfter:100.00 },
+    { date: new Date(now - 2*86400000).toISOString(), type:'Weekly Allowance', amount:1.75, bucket:'Spending', note:'', savingsAfter:101.75, spendingAfter:101.75 },
+    { date: new Date(now - 9*86400000).toISOString(), type:'Weekly Allowance', amount:1.75, bucket:'Savings', note:'', savingsAfter:100.00, spendingAfter:100.00 },
+    { date: new Date(now - 9*86400000).toISOString(), type:'Weekly Allowance', amount:1.75, bucket:'Spending', note:'', savingsAfter:100.00, spendingAfter:100.00 },
+    { date: new Date(now - 35*86400000).toISOString(), type:'Opening Balance', amount:100, bucket:'Savings', note:'Starting balance', savingsAfter:100.00, spendingAfter:100.00 },
+    { date: new Date(now - 35*86400000).toISOString(), type:'Opening Balance', amount:100, bucket:'Spending', note:'Starting balance', savingsAfter:100.00, spendingAfter:100.00 }
+  ];
+  const mockRequests = [
+    { id:'REQ-1', date: new Date(now - 1*86400000).toISOString(), amount:15, reason:'New book about space', status:'Pending', dateActioned:'' }
+  ];
+
+  if (data.action === 'getKidData') {
+    return { success:true, summary:{ savingsBalance:103.50, spendingBalance:91.75, totalInterestEarned:0.87, allowanceNotification:true }, transactions:mockTx, requests:mockRequests, showAllowanceNotification:true };
+  }
+  if (data.action === 'getParentDashboard') {
+    const mockD = {
+      success:true, parentName: data.pin === '1234' ? 'Pooja' : 'Amit',
+      dashboard: {
+        Anaya: { summary:{ savingsBalance:103.50, spendingBalance:91.75, totalInterestEarned:0.87, allowanceNotification:false }, transactions:mockTx, pendingRequests:mockRequests, allRequests:mockRequests },
+        Jia:   { summary:{ savingsBalance:112.25, spendingBalance:98.00, totalInterestEarned:1.12, allowanceNotification:false }, transactions:mockTx, pendingRequests:[], allRequests:[] }
+      }
+    };
+    return mockD;
+  }
+  if (data.action === 'submitRequest')  return { success:true };
+  if (data.action === 'approveRequest') return { success:true };
+  if (data.action === 'denyRequest')    return { success:true };
+  if (data.action === 'topUp')          return { success:true, newSavingsBalance:108.50, newSpendingBalance:96.75 };
+  return { success:false, error:'Unknown action' };
+}
+
+// ============================================================
+// UTILITIES
+// ============================================================
+function fmt(n) {
+  return '$' + (parseFloat(n) || 0).toFixed(2);
+}
+
+function fmtDate(iso) {
+  if (!iso) return '';
+  try {
+    return new Date(iso).toLocaleDateString('en-AU', { day:'numeric', month:'short', year:'numeric' });
+  } catch { return iso; }
+}
+
+function filterByPeriod(txs, period) {
+  const now    = new Date();
+  const cutoff = new Date(now);
+  if      (period === 'week')  cutoff.setDate(now.getDate() - 7);
+  else if (period === 'month') cutoff.setDate(now.getDate() - 30);
+  else                          cutoff.setDate(now.getDate() - 365);
+  return (txs || []).filter(t => new Date(t.date) >= cutoff);
+}
+
+function txIcon(type) {
+  if (!type) return '💰';
+  const t = type.toLowerCase();
+  if (t.includes('allowance'))     return '📅';
+  if (t.includes('interest'))      return '📈';
+  if (t.includes('top up'))        return '➕';
+  if (t.includes('opening'))       return '🎉';
+  if (t.includes('approved'))      return '✅';
+  if (t.includes('denied'))        return '❌';
+  if (t.includes('request'))       return '💸';
+  return '💰';
+}
+
+function escHtml(s) {
+  return String(s || '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function showLoading(show) {
+  document.getElementById('loading-overlay').classList.toggle('show', show);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
